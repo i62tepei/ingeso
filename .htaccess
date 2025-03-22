@@ -1,0 +1,27 @@
+# Habilitar el RewriteEngine
+RewriteEngine On
+
+# Redirigir todas las solicitudes a la API sin la extensión .php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/([a-zA-Z0-9_-]+)$ api/api.php?endpoint=$1 [QSA,L]
+
+# Configuración de seguridad básica
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Deshabilitar la visualización de archivos y directorios
+Options -Indexes
+
+# Forzar UTF-8
+AddDefaultCharset UTF-8
+
+# Permitir CORS (opcional, si accedes desde otro dominio o aplicación externa)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
